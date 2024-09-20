@@ -102,16 +102,16 @@
             })
 
             //                            Canal
-            var channel = pusher.subscribe("canalRegistrosTemperaturaHumedad");
+            var channel = pusher.subscribe("canalRegistrosCursos");
 
             //           Evento
-            channel.bind("registroTemperaturaHumedad", function (temperaturaHumedad) {
+            channel.bind("registrocursos", function (cursos) {
                 // alert("Ocurrió el evento")
                 // console.log(temperaturaHumedad)
                 /**
-                $("#tbodyTemperaturaHumedad").prepend(`<tr>
-                    <td>${temperaturaHumedad.temperatura}</td>
-                    <td>${temperaturaHumedad.humedad}</td>
+                $("#tbodycursos").prepend(`<tr>
+                    <td>${cursos}</td>
+                    <td>${cursos}</td>
                     <td></td>
                 </tr>`)
                 */
