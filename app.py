@@ -70,5 +70,5 @@ def registrar():
         ssl=True
     )
 
-    pusher_client.trigger("canalRegistrosTemperaturaHumedad", "registroTemperaturaHumedad", args)
+    pusher_client.trigger("canalRegistroscursos", "registrocursos", args)
     return args
