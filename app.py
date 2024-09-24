@@ -47,7 +47,7 @@ def buscar():
         con.reconnect()
 
     cursor = con.cursor()
-    cursor.execute("SELECT * FROM sensor_log ORDER BY Id_Log DESC")
+    cursor.execute("SELECT * FROM tst0_cursos ORDER BY Id_Cursos DESC")
     registros = cursor.fetchall()
 
     con.close()
@@ -63,8 +63,8 @@ def registrar():
 
     cursor = con.cursor()
 
-    sql = "INSERT INTO sensor_log (Temperatura, Humedad, Fecha_Hora) VALUES (%s, %s, %s)"
-    val = (args["temperatura"], args["humedad"], datetime.datetime.now(pytz.timezone("America/Matamoros")))
+    sql = "INSERT INTO tst0_cursos (Nombre_Curso, Telefono, Fecha_Hora) VALUES (%s, %s, %s)"
+    val = (args["Nombre_Curso"], args["Telefono"], datetime.datetime.now(pytz.timezone("America/Matamoros")))
     cursor.execute(sql, val)
     
     con.commit()
