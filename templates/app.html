@@ -1,3 +1,4 @@
+Nuevo: Combinaciones de teclas … Se actualizaron las combinaciones de teclas de Drive para que puedas navegar con las primeras letras.
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -71,61 +72,5 @@
             </tr>
         </tbody>
     </table>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    <script>
-        window.addEventListener("load", function (event) {
-            // Realizamos un SELECT a la BD con FLASK y lo imprimimos en el TBODY
-            function buscar() {
-                $.get("/buscar", function (respuesta) {
-                    // Imprimimos la respuesta de FLASK con SELECT para saber cómo acceder a cada valor y colocarlos en el TBODY
-                    // console.log(respuesta)
-
-                    $("#tbodyTemperaturaHumedad").html("")
-
-                    for (var x in respuesta) {
-                        var temperaturaHumedad = respuesta[x]
-                        $("#tbodyTemperaturaHumedad").append(`<tr>
-                            <td>${temperaturaHumedad[1]}</td>
-                            <td>${temperaturaHumedad[2]}</td>
-                            <td>${temperaturaHumedad[3]}</td>
-                        </tr>`)
-                    }
-                })
-            }
-
-            buscar()
-
-            Pusher.logToConsole = true
-            
-           var pusher = new Pusher('1956602afbf37454f0c8', {
-      cluster: 'mt1'
-    });
-
-            // Canal ---> Donde se concentran los hilos con los clientes conectados
-            var channel = pusher.subscribe("canalRegistrosTemperaturaHumedad");
-
-            // Evento --> El código que se accionará con la información enviada o el uso del canal
-            channel.bind("registroTemperaturaHumedad", function (temperaturaHumedad) {
-                // 1. Notificar el evento
-                // alert("Ocurrió el evento")
-
-                // 2. Recibir información enviada en el evento
-                // console.log(temperaturaHumedad)
-
-                // 3. Trabajar información enviada por el evento
-                /**
-                $("#tbodyTemperaturaHumedad").prepend(`<tr>
-                    <td>${temperaturaHumedad.temperatura}</td>
-                    <td>${temperaturaHumedad.humedad}</td>
-                    <td></td>
-                </tr>`)
-                */
-
-                // 4. Mandar a llamar otro código luego del evento
-                buscar()
-            })
-        })
-    </script> 
 </body>
 </html>
