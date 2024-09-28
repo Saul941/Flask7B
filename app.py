@@ -50,13 +50,22 @@ def buscar():
     return jsonify(registros)
 
 @app.route("/inscribir", methods=["POST"])
-def inscribir():
-    data = request.json
-    curso_id = data.get("curso_id")
-    telefono = data.get("telefono")
+def registrar():
+    args = request.args
+
+    if not con.is_connected():
+        con.reconnect()
+
+    cursor = con.cursor()
+
+    sql = "INSERT INTO tst0_Cursos (Nombre_Curso, Telefono ) VALUES (%s, %s)"
+    val = (args["nombre_curso"], args["Telefono"])
+    cursor.execute(sql, val)
     
-    # Aquí podrías guardar la inscripción en la base de datos si lo deseas
-    # Ejemplo: guardar en una tabla de inscripciones
+    con.commit()
+    con.close()
+    
+  
 
     # Envía el evento a Pusher
     pusher_client.trigger("canalRegistrosCursos", "nuevoCurso", {"curso_id": curso_id, "telefono": telefono})
