@@ -49,7 +49,7 @@ def buscar():
     # Convierte los registros a un formato JSON
     return jsonify(registros)
 
-@app.route("/inscribir", methods=["POST"])
+@app.route("/registrar", methods=["POST"])
 def registrar():
     args = request.args
 
