@@ -12,7 +12,7 @@
 <body>
     <div class="container mt-5">
         <h1>Formulario de Contacto</h1>
-        <form id="frmContacto" action="/contacto" method="POST">
+        <form id="frmContacto">
             <div class="mb-3">
                 <label for="curso" class="form-label">Nombre del Curso</label>
                 <select class="form-select" id="curso" name="curso" required>
@@ -44,6 +44,20 @@
     <script>
         $(document).ready(function() {
             $("#frmContacto").validate({
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: '/registrar',
+                        type: 'POST',
+                        data: {
+                            nombre_curso: $("#curso").val(),
+                            Telefono: $("#telefono").val()
+                        },
+                        success: function(response) {
+                            alert(response.message);
+                            buscar(); // Refresca la tabla después de registrar
+                        }
+                    });
+                },
                 rules: {
                     curso: {
                         required: true
@@ -75,8 +89,8 @@
                     for (var x in respuesta) {
                         var registro = respuesta[x];
                         $("#tbodyLog").append(`<tr>
-                            <td>${registro.Nombre_Curso}</td>
-                            <td>${registro.Telefono}</td>
+                            <td>${registro[1]}</td>
+                            <td>${registro[2]}</td>
                         </tr>`);
                     }
                 });
