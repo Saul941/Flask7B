@@ -15,13 +15,19 @@
         <form id="frmContacto" action="/contacto" method="POST">
             <div class="mb-3">
                 <label for="curso" class="form-label">Nombre del Curso</label>
-                <input type="text" class="form-control" id="curso" name="curso" required minlength="10" maxlength="50">
+                <select class="form-select" id="curso" name="curso" required>
+                    <option value="">Seleccione un curso</option>
+                    <option value="Seguridad Informática">Seguridad Informática</option>
+                    <option value="Química">Química</option>
+                    <option value="Arquitectura">Arquitectura</option>
+                    <option value="Matemáticas">Matemáticas</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
                 <input type="tel" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="15">
             </div>
-            <button type="submit" class="btn btn-primary">registrar</button>
+            <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
     </div>
     <div class="container">
@@ -40,9 +46,7 @@
             $("#frmContacto").validate({
                 rules: {
                     curso: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 50
+                        required: true
                     },
                     telefono: {
                         required: true,
@@ -53,9 +57,7 @@
                 },
                 messages: {
                     curso: {
-                        required: "Por favor, introduce el nombre del curso.",
-                        minlength: "El curso debe tener al menos 10 caracteres.",
-                        maxlength: "El curso no puede tener más de 50 caracteres."
+                        required: "Por favor, selecciona un curso."
                     },
                     telefono: {
                         required: "Por favor, introduce tu teléfono.",
