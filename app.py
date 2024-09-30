@@ -30,7 +30,7 @@ def index():
 def buscar():
     con = get_db_connection()
     cursor = con.cursor()
-    cursor.execute("SELECT Nombre_Curso, Telefono FROM tst0_Cursos")  # Cambiado a tu tabla y campos
+    cursor.execute("SELECT Nombre_Curso, Telefono FROM tst0_cursos")  # Cambiado a tu tabla y campos
     registros = cursor.fetchall()
     con.close()
     return jsonify(registros)
@@ -43,7 +43,7 @@ def registrar():
     con = get_db_connection()
     cursor = con.cursor()
 
-    sql = "INSERT INTO tst0_Cursos (Nombre_Curso, Telefono) VALUES (%s, %s)"
+    sql = "INSERT INTO tst0_cursos (Nombre_Curso, Telefono) VALUES (%s, %s)"
     val = (nombre_curso, telefono)
     cursor.execute(sql, val)
     
