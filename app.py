@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import pusher
 import mysql.connector
-import datetime
-import pytz
 
 app = Flask(__name__)
 
@@ -28,47 +26,32 @@ pusher_client = pusher.Pusher(
 def index():
     return render_template("app.html")
 
-@app.route("/alumnos")
-def alumnos():
-    return render_template("alumnos.html")
-
-@app.route("/alumnos/guardar", methods=["POST"])
-def alumnos_guardar():
-    matricula = request.form["txtMatriculaFA"]
-    nombreapellido = request.form["txtNombreApellidoFA"]
-    return f"Matrícula {matricula} Nombre y Apellido {nombreapellido}"
-
 @app.route("/buscar")
 def buscar():
     con = get_db_connection()
     cursor = con.cursor()
-    cursor.execute("SELECT ID_Curso, Nombre_Curso FROM tst0_cursos")  # Cambiado a tu tabla y campos
+    cursor.execute("SELECT Nombre_Curso, Telefono FROM tst0_Cursos")  # Cambiado a tu tabla y campos
     registros = cursor.fetchall()
     con.close()
-
-    # Convierte los registros a un formato JSON
     return jsonify(registros)
 
 @app.route("/registrar", methods=["POST"])
 def registrar():
-    args = request.args
+    nombre_curso = request.form["nombre_curso"]
+    telefono = request.form["Telefono"]
 
-    if not con.is_connected():
-        con.reconnect()
-
+    con = get_db_connection()
     cursor = con.cursor()
 
-    sql = "INSERT INTO tst0_Cursos (Nombre_Curso, Telefono ) VALUES (%s, %s)"
-    val = (args["nombre_curso"], args["Telefono"])
+    sql = "INSERT INTO tst0_Cursos (Nombre_Curso, Telefono) VALUES (%s, %s)"
+    val = (nombre_curso, telefono)
     cursor.execute(sql, val)
     
     con.commit()
     con.close()
-    
-  
 
     # Envía el evento a Pusher
-    pusher_client.trigger("canalRegistrosCursos", "nuevoCurso", {"curso_id": curso_id, "telefono": telefono})
+    pusher_client.trigger("registrosTiempoReal", "registroTiempoReal", {"curso": nombre_curso, "telefono": telefono})
 
     return jsonify({"message": "Inscripción recibida."}), 200
 
