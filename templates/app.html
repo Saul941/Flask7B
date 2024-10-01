@@ -98,9 +98,9 @@
 
             Pusher.logToConsole = true
             
-            var pusher = new Pusher("fa5d8bfda2ad7ea780a1", {
-                cluster: "us2"
-            })
+           var pusher = new Pusher('ab077c6305428af0579b', {
+                  cluster: 'mt1'
+                });
 
             // Canal ---> Donde se concentran los hilos con los clientes conectados
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
