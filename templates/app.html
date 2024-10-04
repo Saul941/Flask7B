@@ -44,6 +44,9 @@
         </table>
     </div>
 
+    <!-- Alert para mostrar mensajes -->
+    <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
@@ -111,7 +114,7 @@
             channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
                 alert("Ocurrió el evento");
                 console.log(inscripcionCurso);
-                buscar();
+                buscar(); // Llamar a buscar para actualizar la tabla
             });
 
             // Función para editar
@@ -135,7 +138,13 @@
                 var id = $(this).attr("data-id");
 
                 $.post("/eliminar", { id: id }, function (respuesta) {
+                    $("#alertMensaje").removeClass("d-none").text("Registro eliminado con éxito.");
                     buscar(); // Volver a cargar la tabla después de eliminar
+
+                    // Ocultar el mensaje después de 3 segundos
+                    setTimeout(function() {
+                        $("#alertMensaje").addClass("d-none");
+                    }, 3000);
                 });
             });
         });
