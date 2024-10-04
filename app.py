@@ -37,10 +37,10 @@ def alumnosGuardar():
 # Función para notificar actualizaciones de cursos usando Pusher
 def notificarActualizacionCursos():
     pusher_client = pusher.Pusher(
-        app_id = "1872172",
-        key = "ab077c6305428af0579b",
-        secret = "a2f133d9ea7bb1f9e37e",
-        cluster = "mt1",
+        app_id="1872172",
+        key="ab077c6305428af0579b",
+        secret="a2f133d9ea7bb1f9e37e",
+        cluster="mt1",
         ssl=True
     )
     pusher_client.trigger("canalRegistrosInscripcionCursos", "registroInscripcionCursos", {})
@@ -73,6 +73,7 @@ def guardar():
     id_curso = request.form["id"]
     nombre_curso = request.form["curso"]
     telefono = request.form["telefono"]
+    fechahora = datetime.datetime.now(pytz.timezone("America/Matamoros"))
 
     cursor = con.cursor()
 
