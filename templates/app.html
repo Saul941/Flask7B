@@ -17,7 +17,7 @@
         <!-- Alert para mostrar mensajes -->
         <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
 
-        <form action="/registrar" method="GET" id="formInscripcion">
+        <form id="formInscripcion">
             <div class="mb-3">
                 <label for="curso" class="form-label">Curso</label>
                 <select class="form-select" id="curso" name="curso" required>
@@ -74,6 +74,29 @@
                         minlength: "El número debe tener 10 dígitos.",
                         maxlength: "El número debe tener 10 dígitos."
                     },
+                },
+                submitHandler: function(form) {
+                    // Prevent default submission
+                    event.preventDefault();
+                    
+                    // Obtener los datos del formulario
+                    const curso = $("#curso").val();
+                    const telefono = $("#telefono").val();
+                    
+                    // Aquí puedes hacer una solicitud AJAX para enviar los datos
+                    $.post("/registrar", { curso: curso, telefono: telefono }, function(response) {
+                        // Manejar la respuesta
+                        $("#alertMensaje").removeClass("d-none").text("Inscripción realizada con éxito.");
+                        buscar(); // Volver a cargar la tabla después de registrar
+
+                        // Ocultar el mensaje después de 3 segundos
+                        setTimeout(function() {
+                            $("#alertMensaje").addClass("d-none");
+                        }, 3000);
+                    });
+
+                    // Limpia los campos después de la inscripción
+                    form.reset();
                 }
             });
         });
@@ -112,11 +135,12 @@
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
 
             // Evento --> El código que se accionará con la información enviada o el uso del canal
-            //channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
-                //alert("Ocurrió el evento");
-                //console.log(inscripcionCurso);
-                //buscar(); // Llamar a buscar para actualizar la tabla
-           // });
+            // channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
+            //     // Eliminar el alert de evento
+            //     // alert("Ocurrió el evento");
+            //     // console.log(inscripcionCurso);
+            //     buscar(); // Llamar a buscar para actualizar la tabla
+            // });
 
             // Función para editar
             $(document).on("click", ".btn-editar", function (event) {
