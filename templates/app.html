@@ -112,11 +112,11 @@
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
 
             // Evento --> El código que se accionará con la información enviada o el uso del canal
-            channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
-                alert("Ocurrió el evento");
-                console.log(inscripcionCurso);
-                buscar(); // Llamar a buscar para actualizar la tabla
-            });
+            //channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
+                //alert("Ocurrió el evento");
+                //console.log(inscripcionCurso);
+                //buscar(); // Llamar a buscar para actualizar la tabla
+           // });
 
             // Función para editar
             $(document).on("click", ".btn-editar", function (event) {
