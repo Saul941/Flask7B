@@ -37,7 +37,6 @@
                 <tr>
                     <th>Nombre del Curso</th>
                     <th>Teléfono</th>
-                    <th>Acciones</th> <!-- Nueva columna para los botones -->
                 </tr>
             </thead>
             <tbody id="tbodyInscripcionCurso"></tbody>
@@ -80,34 +79,22 @@
             // Realizamos un SELECT a la BD con FLASK y lo imprimimos en el TBODY
             function buscar() {
                 $.get("/buscar", function (respuesta) {
+                    // Imprimimos la respuesta de FLASK con SELECT para saber cómo acceder a cada valor y colocarlos en el TBODY
+                    console.log(respuesta)
+
                     $("#tbodyInscripcionCurso").html("")
 
                     for (var x in respuesta) {
                         var inscripcionCurso = respuesta[x]
-                        $("#tbodyInscripcionCurso").append(`<tr>
+                        $("#tbodyInscripcionCurso").append(<tr>
                             <td>${inscripcionCurso[1]}</td>
                             <td>${inscripcionCurso[2]}</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-id="${inscripcionCurso[0]}">Editar</button>
-                                <button class="btn btn-danger btn-sm btn-eliminar" data-id="${inscripcionCurso[0]}">Eliminar</button>
-                            </td>
-                        </tr>`)
+                        </tr>)
                     }
-
-                    // Agregar eventos de clic a los botones de eliminar y editar
-                    $(".btn-eliminar").click(function() {
-                        var id = $(this).data("id");
-                        eliminarRegistro(id);
-                    });
-
-                    $(".btn-editar").click(function() {
-                        var id = $(this).data("id");
-                        editarRegistro(id);
-                    });
-                });
+                })
             }
 
-            buscar();
+            buscar()
 
             Pusher.logToConsole = true
             
@@ -115,46 +102,29 @@
                   cluster: 'mt1'
                 });
 
+            // Canal ---> Donde se concentran los hilos con los clientes conectados
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
 
+            // Evento --> El código que se accionará con la información enviada o el uso del canal
             channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
+                // 1. Notificar el evento
                 alert("Ocurrió el evento")
 
-                $("#tbodyInscripcionCurso").prepend(`<tr>
+                // 2. Recibir información enviada en el evento
+                console.log(inscripcionCurso)
+
+                // 3. Trabajar información enviada por el evento
+                
+                $("#tbodyinscripcionCurso").prepend(<tr>
                     <td>${inscripcionCurso.curso}</td>
                     <td>${inscripcionCurso.telefono}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-editar" data-id="${inscripcionCurso.id}">Editar</button>
-                        <button class="btn btn-danger btn-sm btn-eliminar" data-id="${inscripcionCurso.id}">Eliminar</button>
-                    </td>
-                </tr>`)
+                    <td></td>
+                </tr>)
+                
 
-                buscar();
-            });
-
-            // Función para eliminar un registro
-            function eliminarRegistro(id) {
-                if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-                    $.ajax({
-                        url: `/eliminar/${id}`,
-                        type: 'DELETE',
-                        success: function(result) {
-                            alert("Registro eliminado correctamente.");
-                            buscar();
-                        },
-                        error: function(err) {
-                            alert("Error al eliminar el registro.");
-                            console.error(err);
-                        }
-                    });
-                }
-            }
-
-            // Función para editar un registro
-            function editarRegistro(id) {
-                // Aquí puedes abrir un modal o redirigir a un formulario de edición
-                window.location.href = `/editar/${id}`;
-            }
+                // 4. Mandar a llamar otro código luego del evento
+                buscar()
+            })
         })
     </script>
 </body>
