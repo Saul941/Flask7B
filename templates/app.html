@@ -16,15 +16,10 @@
 
        
 
-        <form action="/registrar" method="GET" id="formInscripcion">
+        <form method="GET" id="formInscripcion">
             <div class="mb-3">
                 <label for="curso" class="form-label">Curso</label>
-                <select class="form-select" id="curso" name="curso" required>
-                    <option value="">Selecciona un curso</option>
-                    <option value="DSW">Desarrollo Software</option>
-                    <option value="MAI">Mantenimiento Industrial</option>
-                    <option value="MEC">Mecatrónica</option>
-                </select>
+                <input type="text" class="form-control" id="Curso" name="Curso" required minlength="10" maxlength="10" pattern="\d{10}" autocomplete= "off">
             </div>
              
             <div class="mb-3">
