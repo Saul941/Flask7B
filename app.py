@@ -44,7 +44,7 @@ def buscar():
 
     return registros
 
-@app.route("/registrar", methods=["POST"])
+@app.route("/registrar", methods=["GET"])
 def registrar():
     args = request.args
 
