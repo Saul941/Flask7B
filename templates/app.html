@@ -12,7 +12,10 @@
 <body>
     <div class="container mt-5">
         <h2>Inscripción a Curso</h2>
-        <small>Mario Antonio Mejia Valadez</small>
+        <small>Saul Flores Ramirez</small>
+
+       
+
         <form action="/registrar" method="GET" id="formInscripcion">
             <div class="mb-3">
                 <label for="curso" class="form-label">Curso</label>
@@ -23,12 +26,15 @@
                     <option value="MEC">Mecatrónica</option>
                 </select>
             </div>
+             
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
                 <input type="text" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="10" pattern="\d{10}">
             </div>
             <button type="submit" class="btn btn-primary">Solicitar inscripción</button>
         </form>
+        <!-- Alert para mostrar mensajes -->
+        <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
     </div>
 
     <div class="container mt-5">
@@ -135,7 +141,13 @@
                 var id = $(this).attr("data-id");
 
                 $.post("/eliminar", { id: id }, function (respuesta) {
+                    $("#alertMensaje").removeClass("d-none").text("Registro eliminado con éxito.");
                     buscar(); // Volver a cargar la tabla después de eliminar
+
+                    // Ocultar el mensaje después de 3 segundos
+                    setTimeout(function() {
+                        $("#alertMensaje").addClass("d-none");
+                    }, 3000);
                 });
             });
         });
