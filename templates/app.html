@@ -13,10 +13,6 @@
     <div class="container mt-5">
         <h2>Inscripción a Curso</h2>
         <small>Mario Antonio Mejia Valadez</small>
-
-        <!-- Alert para mostrar mensajes -->
-        <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
-
         <form action="/registrar" method="GET" id="formInscripcion">
             <div class="mb-3">
                 <label for="curso" class="form-label">Curso</label>
@@ -139,13 +135,7 @@
                 var id = $(this).attr("data-id");
 
                 $.post("/eliminar", { id: id }, function (respuesta) {
-                    $("#alertMensaje").removeClass("d-none").text("Registro eliminado con éxito.");
                     buscar(); // Volver a cargar la tabla después de eliminar
-
-                    // Ocultar el mensaje después de 3 segundos
-                    setTimeout(function() {
-                        $("#alertMensaje").addClass("d-none");
-                    }, 3000);
                 });
             });
         });
