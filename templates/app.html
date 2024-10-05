@@ -12,7 +12,7 @@
 <body>
     <div class="container mt-5">
         <h2>Inscripción a Curso</h2>
-        <small>Saul Flores Ramirez</small>
+        <small>Mario Antonio Mejia Valadez</small>
 
         <!-- Alert para mostrar mensajes -->
         <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
@@ -29,7 +29,7 @@
             </div>
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="10" pattern="\d{10}" autocomplete="off">
+                <input type="text" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="10" pattern="\d{10}">
             </div>
             <button type="submit" class="btn btn-primary">Solicitar inscripción</button>
         </form>
@@ -88,14 +88,14 @@
 
                     for (var x in respuesta) {
                         var inscripcionCurso = respuesta[x];
-                        $("#tbodyInscripcionCurso").append(<tr>
+                        $("#tbodyInscripcionCurso").append(`<tr>
                             <td>${inscripcionCurso[1]}</td>
                             <td>${inscripcionCurso[2]}</td>
                             <td>
                                 <button class="btn btn-primary btn-editar" data-id="${inscripcionCurso[0]}">Editar</button>
                                 <button class="btn btn-danger btn-eliminar" data-id="${inscripcionCurso[0]}">Eliminar</button>
                             </td>
-                        </tr>);
+                        </tr>`);
                     }
                 });
             }
@@ -112,11 +112,11 @@
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
 
             // Evento --> El código que se accionará con la información enviada o el uso del canal
-            //channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
-                //alert("Ocurrió el evento");
-                //console.log(inscripcionCurso);
-                //buscar(); // Llamar a buscar para actualizar la tabla
-           // });
+            channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
+                alert("Ocurrió el evento");
+                console.log(inscripcionCurso);
+                buscar(); // Llamar a buscar para actualizar la tabla
+            });
 
             // Función para editar
             $(document).on("click", ".btn-editar", function (event) {
