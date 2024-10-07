@@ -45,7 +45,7 @@ def alumnosGuardar():
     return f"Matrícula {matricula} Nombre y Apellido {nombreapellido}"
 
 # Código usado en las prácticas
-def notificarActualizacionTemperaturaHumedad():
+def notificarActualizacionCursos():
     pusher_client = pusher.Pusher(
         app_id = "1872172",
         key = "ab077c6305428af0579b",
@@ -103,7 +103,7 @@ def guardar():
     con.commit()
     con.close()
 
-    notificarActualizacionTemperaturaHumedad()
+    notificarActualizacionCursos()
 
     return make_response(jsonify({}))
 
@@ -145,6 +145,6 @@ def eliminar():
     con.commit()
     con.close()
 
-    notificarActualizacionTemperaturaHumedad()
+    notificarActualizacionCursos()
 
     return make_response(jsonify({}))
