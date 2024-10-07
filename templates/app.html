@@ -12,24 +12,23 @@
 <body>
     <div class="container mt-5">
         <h2>Inscripción a Curso</h2>
-        <small>Saul Flores Ramirez</small>
-
-       
-
-        <form method="GET" id="formInscripcion">
+        <small>Mario Antonio Mejia Valadez</small>
+        <form action="/registrar" method="GET" id="formInscripcion">
             <div class="mb-3">
                 <label for="curso" class="form-label">Curso</label>
-                <input type="text" class="form-control" id="Curso" name="Curso"  maxlength="10" pattern="\d{10}" autocomplete= "off">
+                <select class="form-select" id="curso" name="curso" required>
+                    <option value="">Selecciona un curso</option>
+                    <option value="DSW">Desarrollo Software</option>
+                    <option value="MAI">Mantenimiento Industrial</option>
+                    <option value="MEC">Mecatronica</option>
+                </select>
             </div>
-             
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="10" pattern="\d{10}" autocomplete= "off">
+                <input type="text" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="10" pattern="\d{10}">
             </div>
             <button type="submit" class="btn btn-primary">Solicitar inscripción</button>
         </form>
-        <!-- Alert para mostrar mensajes -->
-        <div class="alert alert-success d-none" id="alertMensaje" role="alert"></div>
     </div>
 
     <div class="container mt-5">
@@ -38,7 +37,6 @@
                 <tr>
                     <th>Nombre del Curso</th>
                     <th>Teléfono</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="tbodyInscripcionCurso"></tbody>
@@ -81,71 +79,53 @@
             // Realizamos un SELECT a la BD con FLASK y lo imprimimos en el TBODY
             function buscar() {
                 $.get("/buscar", function (respuesta) {
-                    $("#tbodyInscripcionCurso").html("");
+                    // Imprimimos la respuesta de FLASK con SELECT para saber cómo acceder a cada valor y colocarlos en el TBODY
+                    console.log(respuesta)
+
+                    $("#tbodyInscripcionCurso").html("")
 
                     for (var x in respuesta) {
-                        var inscripcionCurso = respuesta[x];
+                        var inscripcionCurso = respuesta[x]
                         $("#tbodyInscripcionCurso").append(`<tr>
                             <td>${inscripcionCurso[1]}</td>
                             <td>${inscripcionCurso[2]}</td>
-                            <td>
-                                <button class="btn btn-primary btn-editar" data-id="${inscripcionCurso[0]}">Editar</button>
-                                <button class="btn btn-danger btn-eliminar" data-id="${inscripcionCurso[0]}">Eliminar</button>
-                            </td>
-                        </tr>`);
+                        </tr>`)
                     }
-                });
+                })
             }
 
-            buscar();
+            buscar()
 
-            Pusher.logToConsole = true;
-
-            var pusher = new Pusher('ab077c6305428af0579b', {
-                cluster: 'mt1'
-            });
+            Pusher.logToConsole = true
+            
+           var pusher = new Pusher('ab077c6305428af0579b', {
+                  cluster: 'mt1'
+                });
 
             // Canal ---> Donde se concentran los hilos con los clientes conectados
             var channel = pusher.subscribe("canalRegistrosInscripcionCursos");
 
             // Evento --> El código que se accionará con la información enviada o el uso del canal
             channel.bind("registroInscripcionCursos", function (inscripcionCurso) {
-                alert("Ocurrió el evento");
-                console.log(inscripcionCurso);
-                buscar(); // Llamar a buscar para actualizar la tabla
-            });
+                // 1. Notificar el evento
+                alert("Ocurrió el evento")
 
-            // Función para editar
-            $(document).on("click", ".btn-editar", function (event) {
-                var id = $(this).attr("data-id");
+                // 2. Recibir información enviada en el evento
+                console.log(inscripcionCurso)
 
-                $.get("/editar", { id: id }, function (respuesta) {
-                    var inscripcionCurso = respuesta[0];
+                // 3. Trabajar información enviada por el evento
+                
+                $("#tbodyinscripcionCurso").prepend(`<tr>
+                    <td>${inscripcionCurso.curso}</td>
+                    <td>${inscripcionCurso.telefono}</td>
+                    <td></td>
+                </tr>`)
+                
 
-                    $("#curso").val(inscripcionCurso["Nombre_Curso"]);
-                    $("#telefono").val(inscripcionCurso["Telefono"]);
-                });
-            });
-
-            // Función para eliminar
-            $(document).on("click", ".btn-eliminar", function (event) {
-                if (!confirm("¿Quieres eliminar este registro?")) {
-                    return;
-                }
-
-                var id = $(this).attr("data-id");
-
-                $.post("/eliminar", { id: id }, function (respuesta) {
-                    $("#alertMensaje").removeClass("d-none").text("Registro eliminado con éxito.");
-                    buscar(); // Volver a cargar la tabla después de eliminar
-
-                    // Ocultar el mensaje después de 3 segundos
-                    setTimeout(function() {
-                        $("#alertMensaje").addClass("d-none");
-                    }, 3000);
-                });
-            });
-        });
+                // 4. Mandar a llamar otro código luego del evento
+                buscar()
+            })
+        })
     </script>
 </body>
 </html>
