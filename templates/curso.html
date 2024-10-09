@@ -80,8 +80,7 @@
             border: 1px solid #dee2e6;
         }
 
-        .btn-warning,
-        .btn-danger {
+        .btn-warning, .btn-danger {
             border-radius: 6px;
         }
 
@@ -133,24 +132,17 @@
 
     <script>
         $(document).ready(function () {
-            // Método para validar caracteres especiales
-            $.validator.addMethod("noSpecialChars", function(value, element) {
-                return this.optional(element) || /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/.test(value);
-            }, "Por favor, no uses caracteres especiales.");
-
             $("#frmCurso").validate({
                 rules: {
                     nombre_curso: {
                         required: true,
                         minlength: 5,
-                        maxlength: 50,
-                        noSpecialChars: true // Agregar la regla aquí
+                        maxlength: 50
                     },
                     telefono: {
                         required: true,
                         minlength: 10,
-                        maxlength: 15,
-                        noSpecialChars: true // Agregar la regla aquí si es necesario
+                        maxlength: 15
                     }
                 },
                 messages: {
@@ -173,14 +165,14 @@
 
                     for (var x in respuesta) {
                         var registro = respuesta[x];
-                        $("#tbodyLog").append(`<tr>
+                        $("#tbodyLog").append(<tr>
                             <td>${registro.Nombre_Curso}</td>
                             <td>${registro.Telefono}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm" onclick="editar(${registro.ID_Curso}, '${registro.Nombre_Curso}', '${registro.Telefono}')">Editar</button>
                                 <button class="btn btn-danger btn-sm" onclick="eliminar(${registro.ID_Curso})">Eliminar</button>
                             </td>
-                        </tr>`);
+                        </tr>);
                     }
                 });
             }
