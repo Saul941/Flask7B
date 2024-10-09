@@ -161,7 +161,6 @@
             function buscar(term = "") {
                 $.get("/buscar", { q: term }, function (respuesta) {
                     $("#tbodyLog").html("");
-
                     for (var x in respuesta) {
                         var registro = respuesta[x];
                         $("#tbodyLog").append(`<tr>
@@ -198,23 +197,26 @@
                 $("#id_curso").val(id);
                 $("#nombre_curso").val(nombre_curso);
                 $("#telefono").val(telefono);
-                
                 $("#submitButton").text("Actualizar");
             };
 
             Pusher.logToConsole = true;
             var pusher = new Pusher('ab077c6305428af0579b', {
-            cluster: 'mt1'
+                cluster: 'mt1'
             });
 
             var channel = pusher.subscribe("registrosTiempoReal");
             channel.bind("registroTiempoReal", function (mensaje) {
                 console.log("Mensaje recibido:", mensaje);
-                buscar();
+                buscar(); // Actualizar la lista de cursos
+            });
+
+            channel.bind("registroEliminado", function (data) {
+                console.log("Curso eliminado:", data);
+                buscar(); // Actualizar la lista de cursos
             });
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
