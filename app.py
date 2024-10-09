@@ -1,16 +1,14 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify
 import pusher
 import mysql.connector
-import datetime
-import pytz
 
 app = Flask(__name__)
 
 pusher_client = pusher.Pusher(
-    app_id='1864237',
-    key='fe0a6fda0635d4db01ce',
-    secret='e5c4c8f921f883404989',
-    cluster='us2',
+    app_id = "1872172",
+    key = "ab077c6305428af0579b",
+    secret = "a2f133d9ea7bb1f9e37e",
+    cluster = "mt1",
     ssl=True
 )
 
@@ -27,42 +25,40 @@ def get_db_connection():
 def index():
     return render_template("app.html")
 
-# Ruta para manejar la creación y edición de contactos
-@app.route("/contacto", methods=["GET", "POST"])
-def contacto():
+# Ruta para manejar la creación y edición de cursos
+@app.route("/curso", methods=["GET", "POST"])
+def curso():
     if request.method == "POST":
-        id_contacto = request.form.get("id_contacto")
-        correo = request.form["email"]
-        nombre = request.form["nombre"]
-        asunto = request.form["asunto"]
+        id_curso = request.form.get("id_curso")
+        nombre_curso = request.form["nombre_curso"]
+        telefono = request.form["telefono"]
 
         con = get_db_connection()
         cursor = con.cursor()
 
-        if id_contacto:
+        if id_curso:
             sql = """
-            UPDATE tst0_contacto
-            SET Correo_Electronico = %s, Nombre = %s, Asunto = %s
-            WHERE Id_Contacto = %s
+            UPDATE tst0_cursos
+            SET Nombre_Curso = %s, Telefono = %s
+            WHERE ID_Curso = %s
             """
-            val = (correo, nombre, asunto, id_contacto)
+            val = (nombre_curso, telefono, id_curso)
             cursor.execute(sql, val)
         else:
-            sql = "INSERT INTO tst0_contacto (Correo_Electronico, Nombre, Asunto) VALUES (%s, %s, %s)"
-            val = (correo, nombre, asunto)
+            sql = "INSERT INTO tst0_cursos (Nombre_Curso, Telefono) VALUES (%s, %s)"
+            val = (nombre_curso, telefono)
             cursor.execute(sql, val)
 
         con.commit()
         con.close()
 
         pusher_client.trigger("registrosTiempoReal", "registroTiempoReal", {
-            "email": correo,
-            "nombre": nombre,
-            "asunto": asunto,
-            "id_contacto": id_contacto if id_contacto else cursor.lastrowid
+            "nombre_curso": nombre_curso,
+            "telefono": telefono,
+            "id_curso": id_curso if id_curso else cursor.lastrowid
         })
 
-    return render_template("contacto.html")
+    return render_template("curso.html")
 
 @app.route("/buscar")
 def buscar():
@@ -70,49 +66,49 @@ def buscar():
     cursor = con.cursor()
     search_query = request.args.get("q", "")
     if search_query:
-        cursor.execute("SELECT * FROM tst0_contacto WHERE Correo_Electronico LIKE %s OR Nombre LIKE %s ORDER BY Id_Contacto DESC", (f"%{search_query}%", f"%{search_query}%"))
+        cursor.execute("SELECT * FROM tst0_cursos WHERE Nombre_Curso LIKE %s ORDER BY ID_Curso DESC", (f"%{search_query}%",))
     else:
-        cursor.execute("SELECT * FROM tst0_contacto ORDER BY Id_Contacto DESC")
+        cursor.execute("SELECT * FROM tst0_cursos ORDER BY ID_Curso DESC")
     
     registros = cursor.fetchall()
     con.close()
 
-    registros_list = [{"Id_Contacto": r[0], "Correo_Electronico": r[1], "Nombre": r[2], "Asunto": r[3]} for r in registros]
+    registros_list = [{"ID_Curso": r[0], "Nombre_Curso": r[1], "Telefono": r[2]} for r in registros]
     return jsonify(registros_list)
 
-@app.route("/eliminar_contacto", methods=["POST"])
-def eliminar_contacto():
+@app.route("/eliminar_curso", methods=["POST"])
+def eliminar_curso():
     con = get_db_connection()
     if not con.is_connected():
         con.reconnect()
 
-    id_contacto = request.form["id"]
+    id_curso = request.form["id"]
 
     cursor = con.cursor()
-    sql = "DELETE FROM tst0_contacto WHERE Id_Contacto = %s"
-    val = (id_contacto,)
+    sql = "DELETE FROM tst0_cursos WHERE ID_Curso = %s"
+    val = (id_curso,)
 
     cursor.execute(sql, val)
     con.commit()
     con.close()
 
-    pusher_client.trigger("registrosTiempoReal", "registroEliminado", {"id": id_contacto})
+    pusher_client.trigger("registrosTiempoReal", "registroEliminado", {"id": id_curso})
 
-    return jsonify({"message": "Contacto eliminado correctamente"})
+    return jsonify({"message": "Curso eliminado correctamente"})
 
-@app.route("/obtener_contacto", methods=["GET"])
-def obtener_contacto():
-    id_contacto = request.args.get("id")
+@app.route("/obtener_curso", methods=["GET"])
+def obtener_curso():
+    id_curso = request.args.get("id")
     con = get_db_connection()
     cursor = con.cursor(dictionary=True)
     
-    sql = "SELECT * FROM tst0_contacto WHERE Id_Contacto = %s"
-    cursor.execute(sql, (id_contacto,))
+    sql = "SELECT * FROM tst0_cursos WHERE ID_Curso = %s"
+    cursor.execute(sql, (id_curso,))
     
-    contacto = cursor.fetchone()
+    curso = cursor.fetchone()
     con.close()
     
-    return jsonify(contacto)
+    return jsonify(curso)
 
 if __name__ == "__main__":
     app.run(debug=True)
