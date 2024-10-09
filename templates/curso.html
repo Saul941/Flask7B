@@ -80,7 +80,8 @@
             border: 1px solid #dee2e6;
         }
 
-        .btn-warning, .btn-danger {
+        .btn-warning,
+        .btn-danger {
             border-radius: 6px;
         }
 
@@ -132,17 +133,24 @@
 
     <script>
         $(document).ready(function () {
+            // Método para validar caracteres especiales
+            $.validator.addMethod("noSpecialChars", function(value, element) {
+                return this.optional(element) || /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/.test(value);
+            }, "Por favor, no uses caracteres especiales.");
+
             $("#frmCurso").validate({
                 rules: {
                     nombre_curso: {
                         required: true,
                         minlength: 5,
-                        maxlength: 50
+                        maxlength: 50,
+                        noSpecialChars: true // Agregar la regla aquí
                     },
                     telefono: {
                         required: true,
                         minlength: 10,
-                        maxlength: 15
+                        maxlength: 15,
+                        noSpecialChars: true // Agregar la regla aquí si es necesario
                     }
                 },
                 messages: {
