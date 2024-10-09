@@ -23,7 +23,7 @@ def get_db_connection():
 
 @app.route("/")
 def index():
-    return render_template("app.html")
+    return render_template("curso.html")
 
 # Ruta para manejar la creación y edición de cursos
 @app.route("/curso", methods=["GET", "POST"])
