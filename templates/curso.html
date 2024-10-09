@@ -12,6 +12,10 @@
     <style>
         body {
             background-color: #f4f6f9;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
@@ -19,7 +23,8 @@
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 40px;
+            width: 100%;
+            max-width: 600px; /* Asegura un ancho máximo para el formulario */
         }
 
         h1 {
@@ -92,9 +97,10 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h1>Formulario de Cursos</h1>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+                <h1>Inscripcion de Curso</h1>
+                <small>Saul Flores Ramirez</small>
                 <form id="frmCurso" action="/curso" method="POST">
                     <input type="hidden" id="id_curso" name="id_curso">
                     <div class="mb-3">
@@ -107,7 +113,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitButton">Registrar Curso</button>
                 </form>
-                 <table class="table table-hover table-bordered">
+                <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Nombre del Curso</th>
@@ -118,16 +124,6 @@
                     <tbody id="tbodyLog"></tbody>
                 </table>
             </div>
-
-            <!--
-            <div class="col-md-6 mt-4">
-                <h2 style="text-align: center; color: #333;">Buscar</h2>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por Nombre del Curso">
-                    <button id="searchButton" class="btn btn-info mt-2">Buscar</button>
-                </div>
-            </div>
-            -->
         </div>
     </div>
 
@@ -206,7 +202,7 @@
 
             Pusher.logToConsole = true;
             var pusher = new Pusher('ab077c6305428af0579b', {
-            cluster: 'mt1'
+                cluster: 'mt1'
             });
 
             var channel = pusher.subscribe("registrosTiempoReal");
