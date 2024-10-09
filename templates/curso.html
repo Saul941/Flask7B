@@ -107,15 +107,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitButton">Registrar Curso</button>
                 </form>
-            </div>
-
-            <div class="col-md-6 mt-4">
-                <h2 style="text-align: center; color: #333;">Buscar</h2>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por Nombre del Curso">
-                    <button id="searchButton" class="btn btn-info mt-2">Buscar</button>
-                </div>
-                <table class="table table-hover table-bordered">
+                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Nombre del Curso</th>
@@ -126,6 +118,16 @@
                     <tbody id="tbodyLog"></tbody>
                 </table>
             </div>
+
+            <!--
+            <div class="col-md-6 mt-4">
+                <h2 style="text-align: center; color: #333;">Buscar</h2>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por Nombre del Curso">
+                    <button id="searchButton" class="btn btn-info mt-2">Buscar</button>
+                </div>
+            </div>
+            -->
         </div>
     </div>
 
@@ -161,6 +163,7 @@
             function buscar(term = "") {
                 $.get("/buscar", { q: term }, function (respuesta) {
                     $("#tbodyLog").html("");
+
                     for (var x in respuesta) {
                         var registro = respuesta[x];
                         $("#tbodyLog").append(`<tr>
@@ -197,23 +200,19 @@
                 $("#id_curso").val(id);
                 $("#nombre_curso").val(nombre_curso);
                 $("#telefono").val(telefono);
+                
                 $("#submitButton").text("Actualizar");
             };
 
             Pusher.logToConsole = true;
             var pusher = new Pusher('ab077c6305428af0579b', {
-                cluster: 'mt1'
+            cluster: 'mt1'
             });
 
             var channel = pusher.subscribe("registrosTiempoReal");
             channel.bind("registroTiempoReal", function (mensaje) {
                 console.log("Mensaje recibido:", mensaje);
-                buscar(); // Actualizar la lista de cursos
-            });
-
-            channel.bind("registroEliminado", function (data) {
-                console.log("Curso eliminado:", data);
-                buscar(); // Actualizar la lista de cursos
+                buscar();
             });
         });
     </script>
