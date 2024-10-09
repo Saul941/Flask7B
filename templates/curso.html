@@ -11,39 +11,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <style>
         body {
-            background-color: #e9ecef;
-            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
         }
 
         .container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            margin-top: 60px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #343a40;
+            font-size: 2.2rem;
+            color: #333;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             font-weight: bold;
-            color: #495057;
+            color: #555;
         }
 
         .form-control {
-            border-radius: 10px;
-            border: 1px solid #ced4da;
+            border-radius: 8px;
+            border-color: #ced4da;
         }
 
         .btn-primary {
             background-color: #007bff;
-            border: none;
-            border-radius: 10px;
+            border-color: #007bff;
+            border-radius: 8px;
             width: 100%;
         }
 
@@ -53,8 +52,7 @@
 
         .btn-info {
             background-color: #17a2b8;
-            border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             width: 100%;
         }
 
@@ -63,60 +61,53 @@
         }
 
         table {
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         th {
             background-color: #007bff;
             color: white;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
         }
 
         td,
         th {
-            padding: 15px;
+            padding: 12px;
             text-align: left;
-            border: 1px solid #dee2e6;
         }
 
-        .btn-warning, .btn-danger {
+        .btn-warning {
+            border-radius: 6px;
+        }
+
+        .btn-danger {
             border-radius: 6px;
         }
 
         #searchInput {
-            border-radius: 10px;
-            margin-bottom: 15px;
-            padding: 10px;
-            width: 100%;
-        }
-
-        .btn-search {
-            border-radius: 10px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="row d-flex justify-content-center">
+        <div class="row">
             <div class="col-md-6">
-                <h1>Inscripción de Curso</h1>
-                <small class="text-muted">Saul Flores Ramirez</small>
+                <h1>Formulario de Cursos</h1>
                 <form id="frmCurso" action="/curso" method="POST">
                     <input type="hidden" id="id_curso" name="id_curso">
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="nombre_curso" class="form-label">Nombre del Curso</label>
                         <input type="text" class="form-control" id="nombre_curso" name="nombre_curso" required minlength="5" maxlength="50">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono</label>
                         <input type="tel" class="form-control" id="telefono" name="telefono" required minlength="10" maxlength="15">
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitButton">Registrar Curso</button>
                 </form>
-                <table class="table table-hover table-bordered">
+                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Nombre del Curso</th>
@@ -127,6 +118,16 @@
                     <tbody id="tbodyLog"></tbody>
                 </table>
             </div>
+
+            <!--
+            <div class="col-md-6 mt-4">
+                <h2 style="text-align: center; color: #333;">Buscar</h2>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por Nombre del Curso">
+                    <button id="searchButton" class="btn btn-info mt-2">Buscar</button>
+                </div>
+            </div>
+            -->
         </div>
     </div>
 
@@ -165,14 +166,14 @@
 
                     for (var x in respuesta) {
                         var registro = respuesta[x];
-                        $("#tbodyLog").append(<tr>
+                        $("#tbodyLog").append(`<tr>
                             <td>${registro.Nombre_Curso}</td>
                             <td>${registro.Telefono}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm" onclick="editar(${registro.ID_Curso}, '${registro.Nombre_Curso}', '${registro.Telefono}')">Editar</button>
                                 <button class="btn btn-danger btn-sm" onclick="eliminar(${registro.ID_Curso})">Eliminar</button>
                             </td>
-                        </tr>);
+                        </tr>`);
                     }
                 });
             }
@@ -205,7 +206,7 @@
 
             Pusher.logToConsole = true;
             var pusher = new Pusher('ab077c6305428af0579b', {
-                cluster: 'mt1'
+            cluster: 'mt1'
             });
 
             var channel = pusher.subscribe("registrosTiempoReal");
