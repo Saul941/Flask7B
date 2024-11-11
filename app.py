@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 import pusher
 import mysql.connector
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Habilitar CORS para todas las rutas
 
 pusher_client = pusher.Pusher(
     app_id = "1872172",
