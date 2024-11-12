@@ -2,5 +2,6 @@ Flask
 Gunicorn
 pusher
 mysql-connector-python
+flask_sqlalchemy
 flask-cors
 pytz
