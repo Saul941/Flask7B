@@ -4,13 +4,13 @@ import mysql.connector
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Habilitar CORS para todas las rutas
+CORS(app)  # Habilitar CORS para aceptar peticiones desde cualquier origen
 
 pusher_client = pusher.Pusher(
-    app_id = "1872172",
-    key = "ab077c6305428af0579b",
-    secret = "a2f133d9ea7bb1f9e37e",
-    cluster = "mt1",
+    app_id="1872172",
+    key="ab077c6305428af0579b",
+    secret="a2f133d9ea7bb1f9e37e",
+    cluster="mt1",
     ssl=True
 )
 
@@ -27,7 +27,6 @@ def get_db_connection():
 def index():
     return render_template("curso.html")
 
-# Ruta para manejar la creación y edición de cursos
 @app.route("/curso", methods=["GET", "POST"])
 def curso():
     if request.method == "POST":
