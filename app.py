@@ -77,6 +77,16 @@ def buscar():
     registros_list = [{"ID_Curso": r[0], "Nombre_Curso": r[1], "Telefono": r[2]} for r in registros]
     return jsonify(registros_list)
 
+
+@app.route("/eliminar_todos_cursos", methods=["POST"])
+def eliminar_todos_cursos():
+    con = get_db_connection()
+    cursor = con.cursor()
+    cursor.execute("DELETE FROM tst0_cursos")
+    con.commit()
+    con.close()
+    return jsonify({"message": "Todos los cursos fueron eliminados correctamente"})
+
 @app.route("/eliminar_curso", methods=["POST"])
 def eliminar_curso():
     con = get_db_connection()
